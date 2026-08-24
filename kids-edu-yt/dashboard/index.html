@@ -300,8 +300,8 @@ button{font-family:'DM Sans',system-ui,sans-serif;cursor:pointer}
         <svg viewBox="0 0 20 20"><path d="M10 2L2 6l8 4 8-4-8-4z"/><path d="M2 14l8 4 8-4"/><path d="M2 10l8 4 8-4"/></svg>
       </div>
       <div>
-        <div class="ch-name">kids-edu-yt</div>
-        <div class="ch-sub">Alphabet · Numbers · STEM</div>
+        <div class="ch-name">Minsa Kids TV</div>
+        <div class="ch-sub">Alphabet · Colors · Songs · Stories</div>
       </div>
     </div>
     <div class="hdr-r">
@@ -347,7 +347,7 @@ button{font-family:'DM Sans',system-ui,sans-serif;cursor:pointer}
     <ul>
       <li><strong>Made for Kids:</strong> Select "Yes" in YouTube Studio — comments and personalized ads are disabled. CPMs are lower.</li>
       <li><strong>AI Disclosure:</strong> Add to every description. Policies change — verify at youtube.com/howyoutubeworks.</li>
-      <li><strong>Human gate:</strong> Never upload, publish, spend money, or change settings without Ahsan's explicit approval.</li>
+      <li><strong>Human gate:</strong> Never upload, publish, spend money, or change channel settings without your explicit approval. All videos marked "Published" were uploaded manually.</li>
     </ul>
   </div>
 </main>
@@ -444,22 +444,45 @@ const CHIP = {
   idea:{cls:'idea',label:'Idea'},
 };
 const DEFAULT_VIDEOS = [
-  {slug:'letter-a',title:'Letter A — Apple, Ant, Alligator',pillar:'alphabet',ep:'EP 01',status:'visuals',score:8.0,notes:'',youtube_url:'',youtube_stats:null,created:'2026-08-20'},
-  {slug:'counting-1-5',title:"Counting 1–5: Let's Count Together!",pillar:'numbers',ep:'EP 01',status:'script',score:8.4,notes:'',youtube_url:'',youtube_stats:null,created:'2026-08-21'},
-  {slug:'what-is-a-shadow',title:'What is a Shadow?',pillar:'stem',ep:'EP 01',status:'research',score:7.8,notes:'',youtube_url:'',youtube_stats:null,created:'2026-08-22'},
-  {slug:'letter-b',title:'Letter B — Ball, Bear, Butterfly',pillar:'alphabet',ep:'EP 02',status:'idea',score:7.6,notes:'',youtube_url:'',youtube_stats:null,created:'2026-08-23'},
-  {slug:'shapes-cst',title:'Shapes: Circle, Square, Triangle',pillar:'shapes',ep:'EP 01',status:'thumbnail',score:8.2,notes:'',youtube_url:'',youtube_stats:null,created:'2026-08-24'},
+  {slug:'abc-song-alphabet-minsa',title:'ABC Song for Kids — Learn the Alphabet with Minsa & Mana',pillar:'alphabet',ep:'EP 01',status:'published',score:7.2,notes:'',youtube_url:'https://www.youtube.com/watch?v=XHVMbIHuMzU',youtube_stats:null,created:'2026-07-14'},
+  {slug:'abc-adventure-animals-az',title:'ABC Adventure Song — Magical Animals A to Z',pillar:'alphabet',ep:'EP 02',status:'published',score:8.0,notes:'',youtube_url:'https://www.youtube.com/watch?v=ChJc3uyW8So',youtube_stats:null,created:'2026-06-16'},
+  {slug:'abc-animals-a-to-h',title:'ABC Animals A to H — Can You Name Them All? Part 1',pillar:'alphabet',ep:'EP 03',status:'published',score:7.5,notes:'Short (37s)',youtube_url:'https://www.youtube.com/watch?v=HKG1xNCzdU8',youtube_stats:null,created:'2026-06-15'},
+  {slug:'abc-animals-i-to-p',title:'I to P Animal ABC Song — Magical Animals Part 2',pillar:'alphabet',ep:'EP 04',status:'published',score:7.6,notes:'Short (33s)',youtube_url:'https://www.youtube.com/watch?v=UXJrLz7nUGo',youtube_stats:null,created:'2026-06-15'},
+  {slug:'abc-animals-q-to-z',title:'Can You Name These Q–Z Animals? — Part 3',pillar:'alphabet',ep:'EP 05',status:'published',score:7.4,notes:'Short (37s)',youtube_url:'https://www.youtube.com/watch?v=O9PCXN4oC0k',youtube_stats:null,created:'2026-06-15'},
+  {slug:'fruits-veggies-color-song',title:'Fruits & Veggies Color Song — Kids Can\'t Stop Singing!',pillar:'stem',ep:'EP 01',status:'published',score:8.5,notes:'Top performer — 198 views',youtube_url:'https://www.youtube.com/watch?v=LMHOD34mloc',youtube_stats:null,created:'2026-06-12'},
+  {slug:'colorful-food-song',title:'The Colorful Food Song Every Kid Is Obsessed With!',pillar:'stem',ep:'EP 02',status:'published',score:8.2,notes:'',youtube_url:'https://www.youtube.com/watch?v=Dje_JFeIVuI',youtube_stats:null,created:'2026-06-08'},
+  {slug:'penguin-came-to-school',title:'The Penguin Who Came to School — Everyone Was Shocked',pillar:'stem',ep:'EP 03',status:'published',score:7.8,notes:'',youtube_url:'https://www.youtube.com/watch?v=ursiCqsqPoc',youtube_stats:null,created:'2026-06-02'},
+  {slug:'duck-loved-donuts',title:'The Duck Who Loved Donuts — Funniest Kids Poem!',pillar:'stem',ep:'EP 04',status:'published',score:7.7,notes:'',youtube_url:'https://www.youtube.com/watch?v=8uKBxvgZ7d8',youtube_stats:null,created:'2026-05-29'},
+  {slug:'colors-fruits-veggies-learn',title:'Learn Colors Fast with This Fun Fruits & Veggies Song!',pillar:'stem',ep:'EP 05',status:'published',score:7.2,notes:'',youtube_url:'https://www.youtube.com/watch?v=GlraUd_RQTI',youtube_stats:null,created:'2026-06-09'},
+  {slug:'viral-fruits-veggies-colors',title:'NEW Viral Fruits & Veggies Color Song Kids Love Right Now!',pillar:'stem',ep:'EP 06',status:'published',score:7.0,notes:'',youtube_url:'https://www.youtube.com/watch?v=YMWF5xazmWI',youtube_stats:null,created:'2026-06-10'},
 ];
+const SEED_VIDEO_STATS = {
+  'XHVMbIHuMzU':{views:24,likes:4,comments:0},
+  'ChJc3uyW8So':{views:112,likes:0,comments:0},
+  'HKG1xNCzdU8':{views:68,likes:0,comments:0},
+  'UXJrLz7nUGo':{views:82,likes:0,comments:0},
+  'O9PCXN4oC0k':{views:61,likes:0,comments:0},
+  'LMHOD34mloc':{views:198,likes:1,comments:0},
+  'Dje_JFeIVuI':{views:145,likes:0,comments:0},
+  'ursiCqsqPoc':{views:92,likes:2,comments:0},
+  '8uKBxvgZ7d8':{views:86,likes:5,comments:0},
+  'GlraUd_RQTI':{views:24,likes:0,comments:0},
+  'YMWF5xazmWI':{views:13,likes:0,comments:0},
+};
+const SEED_CHANNEL_STATS = {name:'Minsa Kids TV (English)',subscribers:20,views:902,videoCount:11};
 
 /* ===== STATE ===== */
 let videos = [];
-let settings = {apiKey:'',channelId:'',theme:''};
+let settings = {apiKey:'',channelId:'UC0VEi2qpgkqEr1zeYw7ymsg',theme:''};
 let expandedSlug = null;
 let activeFilter = 'all';
 let channelStats = null;
 let videoStatsCache = {};
 
 /* ===== STORAGE ===== */
+function seedStats(){
+  return Object.fromEntries(Object.entries(SEED_VIDEO_STATS).map(([k,v])=>[k,{...v,ts:Date.now()}]));
+}
 function loadData(){
   try{
     const sv = localStorage.getItem('keu-videos');
@@ -468,10 +491,14 @@ function loadData(){
     if(ss) settings = {...settings,...JSON.parse(ss)};
     const sc = localStorage.getItem('keu-ch-stats');
     if(sc){ const p=JSON.parse(sc); if(p&&Date.now()-p.ts<3600000) channelStats=p; }
+    if(!channelStats) channelStats={...SEED_CHANNEL_STATS,ts:Date.now()};
     const vc = localStorage.getItem('keu-vid-stats');
-    if(vc) videoStatsCache = JSON.parse(vc);
+    videoStatsCache = vc ? JSON.parse(vc) : seedStats();
+    if(!Object.keys(videoStatsCache).length) videoStatsCache=seedStats();
   }catch(e){
     videos = JSON.parse(JSON.stringify(DEFAULT_VIDEOS));
+    channelStats={...SEED_CHANNEL_STATS,ts:Date.now()};
+    videoStatsCache=seedStats();
   }
 }
 function saveVideos(){ try{localStorage.setItem('keu-videos',JSON.stringify(videos));}catch(e){} }
