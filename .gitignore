@@ -1,0 +1,14 @@
+.env
+*.env.local
+node_modules/
+.DS_Store
+Thumbs.db
+*.mp4
+*.mp3
+*.wav
+*.aiff
+*.mov
+*.png
+*.jpg
+*.jpeg
+*.webp

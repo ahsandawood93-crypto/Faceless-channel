@@ -1,0 +1,650 @@
+<title>Kids Edu Pipeline</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root {
+  --bg: #FAF6F1;
+  --surface: #FFFFFF;
+  --surface-2: #F4EDE4;
+  --border: #E8DDD0;
+  --border-strong: #CCBFB0;
+
+  --t1: #1B1310;
+  --t2: #6A5A50;
+  --t3: #A8948A;
+
+  --accent: #E8921C;
+  --accent-bg: #FEF2D8;
+  --accent-t: #8C5208;
+
+  --alpha: #D94838; --num: #2374AB; --stem: #279659; --shapes: #7C3FA5;
+
+  --alpha-chip-bg: #FCE9E7; --alpha-chip-t: #B82E20;
+  --num-chip-bg: #DAEAF8;   --num-chip-t: #195F95;
+  --stem-chip-bg: #D7F1E5;  --stem-chip-t: #1A7040;
+  --shapes-chip-bg: #EEE0FA;--shapes-chip-t: #5E2E80;
+
+  --chip-pub-bg: #D3F2E4;  --chip-pub-t: #14613A;
+  --chip-rdy-bg: #D7EBF8;  --chip-rdy-t: #1A5B8A;
+  --chip-wip-bg: #FEF2D8;  --chip-wip-t: #8C5208;
+  --chip-idea-bg: #EDE6DD; --chip-idea-t: #6A5A50;
+
+  --r: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17110D;
+    --surface: #241812;
+    --surface-2: #2E1F17;
+    --border: #3C2A20;
+    --border-strong: #5A3E30;
+    --t1: #F4EBE3;
+    --t2: #C4A898;
+    --t3: #8A7060;
+    --accent: #F0A030;
+    --accent-bg: #3A2208;
+    --accent-t: #F0A030;
+
+    --alpha-chip-bg: #2E0D0A; --alpha-chip-t: #F09080;
+    --num-chip-bg: #08203A;   --num-chip-t: #68B8E8;
+    --stem-chip-bg: #082A10;  --stem-chip-t: #72D890;
+    --shapes-chip-bg: #1E0835;--shapes-chip-t: #CC80F4;
+
+    --chip-pub-bg: #0C3320;  --chip-pub-t: #6DCFA0;
+    --chip-rdy-bg: #0C2840;  --chip-rdy-t: #68B8E8;
+    --chip-wip-bg: #3A2208;  --chip-wip-t: #F0A030;
+    --chip-idea-bg: #2E1F17; --chip-idea-t: #C4A898;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #17110D;
+  --surface: #241812;
+  --surface-2: #2E1F17;
+  --border: #3C2A20;
+  --border-strong: #5A3E30;
+  --t1: #F4EBE3;
+  --t2: #C4A898;
+  --t3: #8A7060;
+  --accent: #F0A030;
+  --accent-bg: #3A2208;
+  --accent-t: #F0A030;
+
+  --alpha-chip-bg: #2E0D0A; --alpha-chip-t: #F09080;
+  --num-chip-bg: #08203A;   --num-chip-t: #68B8E8;
+  --stem-chip-bg: #082A10;  --stem-chip-t: #72D890;
+  --shapes-chip-bg: #1E0835;--shapes-chip-t: #CC80F4;
+
+  --chip-pub-bg: #0C3320;  --chip-pub-t: #6DCFA0;
+  --chip-rdy-bg: #0C2840;  --chip-rdy-t: #68B8E8;
+  --chip-wip-bg: #3A2208;  --chip-wip-t: #F0A030;
+  --chip-idea-bg: #2E1F17; --chip-idea-t: #C4A898;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--t1);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* HEADER */
+.hdr {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.hdr-l { display: flex; align-items: center; gap: 12px; }
+
+.logo {
+  width: 36px; height: 36px;
+  background: var(--accent);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.ch-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem; color: var(--t1); line-height: 1.15; }
+.ch-sub { font-size: 0.66rem; color: var(--t3); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
+
+.hdr-r { display: flex; align-items: center; gap: 10px; }
+
+.badge-mfk {
+  font-size: 0.66rem; font-weight: 600;
+  padding: 3px 10px; border-radius: 20px;
+  background: var(--accent-bg); color: var(--accent-t);
+  border: 1px solid var(--accent); letter-spacing: 0.02em;
+}
+
+.btn-theme {
+  width: 34px; height: 34px;
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--t3); transition: background .12s;
+}
+.btn-theme:hover { background: var(--border); color: var(--t1); }
+.btn-theme svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* STATS */
+.stats {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 28px;
+  display: flex; gap: 2px; flex-wrap: wrap; align-items: center;
+}
+.stat-item { display: flex; align-items: baseline; gap: 5px; padding: 4px 12px; }
+.stat-n { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--t1); font-variant-numeric: tabular-nums; line-height: 1; }
+.stat-l { font-size: 0.68rem; color: var(--t3); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.stat-div { width: 1px; height: 20px; background: var(--border); align-self: center; margin: 0 4px; }
+
+/* LEGEND */
+.legend { background: var(--surface-2); border-bottom: 1px solid var(--border); padding: 10px 28px; overflow-x: auto; }
+.legend-inner { display: flex; align-items: flex-start; min-width: max-content; }
+.lg-stage { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.lg-node {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface); border: 2px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+}
+.lg-node svg { width: 12px; height: 12px; stroke: var(--t3); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.lg-lbl { font-size: 0.6rem; color: var(--t3); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; white-space: nowrap; }
+.lg-line { width: 34px; height: 2px; background: var(--border-strong); flex-shrink: 0; align-self: center; margin-bottom: 18px; }
+
+/* MAIN */
+.main { padding: 20px 28px; }
+
+/* FILTERS */
+.filters { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.fl { font-size: 0.68rem; color: var(--t3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-right: 4px; }
+.fbtn {
+  font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 500;
+  padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--t2); cursor: pointer; transition: all .1s;
+}
+.fbtn:hover { border-color: var(--border-strong); color: var(--t1); }
+.fbtn.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.fbtn[data-p="alphabet"].on { background: var(--alpha); border-color: var(--alpha); }
+.fbtn[data-p="numbers"].on  { background: var(--num); border-color: var(--num); }
+.fbtn[data-p="stem"].on     { background: var(--stem); border-color: var(--stem); }
+.fbtn[data-p="shapes"].on   { background: var(--shapes); border-color: var(--shapes); }
+
+/* CARDS */
+.cards { display: flex; flex-direction: column; gap: 10px; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); display: flex; overflow: hidden;
+  transition: box-shadow .15s, border-color .15s;
+}
+.card:hover { border-color: var(--border-strong); box-shadow: 0 3px 14px rgba(0,0,0,.07); }
+
+.card-bar { width: 4px; flex-shrink: 0; }
+.card[data-p="alphabet"] .card-bar { background: var(--alpha); }
+.card[data-p="numbers"]  .card-bar { background: var(--num); }
+.card[data-p="stem"]     .card-bar { background: var(--stem); }
+.card[data-p="shapes"]   .card-bar { background: var(--shapes); }
+
+.card-body {
+  padding: 14px 18px; flex: 1;
+  display: grid; grid-template-columns: 230px 1fr auto;
+  align-items: center; gap: 20px; min-width: 0;
+}
+
+.c-meta { min-width: 0; }
+.c-ep { font-size: 0.63rem; color: var(--t3); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; margin-bottom: 2px; }
+.c-title {
+  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--t1);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px;
+}
+.c-tags { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.c-ptag { font-size: 0.64rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
+.card[data-p="alphabet"] .c-ptag { background: var(--alpha-chip-bg); color: var(--alpha-chip-t); }
+.card[data-p="numbers"]  .c-ptag { background: var(--num-chip-bg);   color: var(--num-chip-t); }
+.card[data-p="stem"]     .c-ptag { background: var(--stem-chip-bg);  color: var(--stem-chip-t); }
+.card[data-p="shapes"]   .c-ptag { background: var(--shapes-chip-bg);color: var(--shapes-chip-t); }
+.c-score { font-size: 0.68rem; color: var(--t3); font-weight: 500; }
+
+/* PIPELINE NODES */
+.c-pipe {
+  display: flex; align-items: center;
+  overflow-x: auto; padding: 3px 0;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.c-pipe::-webkit-scrollbar { display: none; }
+
+.pn-wrap { position: relative; display: flex; align-items: center; }
+
+.pn {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; cursor: default; transition: transform .1s; z-index: 1;
+}
+.pn:hover { transform: scale(1.3); }
+.pn svg { width: 10px; height: 10px; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+
+.pn.done   { background: var(--accent); }
+.pn.done svg { stroke: #fff; }
+.pn.active { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-bg); }
+.pn.active svg { stroke: #fff; }
+.pn.future { background: var(--surface-2); border: 1.5px solid var(--border); }
+.pn.future svg { stroke: var(--t3); }
+
+.pl { width: 14px; height: 2px; flex-shrink: 0; }
+.pl.done   { background: var(--accent); }
+.pl.future { background: var(--border); }
+
+.pn-tip {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  background: var(--t1); color: var(--bg);
+  font-size: 0.6rem; padding: 3px 7px; border-radius: 4px;
+  white-space: nowrap; pointer-events: none; opacity: 0;
+  transition: opacity .1s; z-index: 20;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.pn-wrap:hover .pn-tip { opacity: 1; }
+
+/* STATUS */
+.c-status { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; flex-shrink: 0; }
+.sch {
+  font-size: 0.66rem; font-weight: 700; padding: 4px 11px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
+}
+.sch.pub  { background: var(--chip-pub-bg); color: var(--chip-pub-t); }
+.sch.rdy  { background: var(--chip-rdy-bg); color: var(--chip-rdy-t); }
+.sch.wip  { background: var(--chip-wip-bg); color: var(--chip-wip-t); }
+.sch.idea { background: var(--chip-idea-bg); color: var(--chip-idea-t); }
+.c-next { font-size: 0.67rem; color: var(--t3); text-align: right; line-height: 1.45; max-width: 155px; }
+
+/* EMPTY */
+.empty { text-align: center; padding: 56px 20px; }
+.empty-icon { font-size: 2rem; margin-bottom: 10px; opacity: .35; }
+.empty-h { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--t2); margin-bottom: 5px; }
+.empty-p { font-size: 0.78rem; color: var(--t3); }
+
+/* QUICK REF */
+.qr { margin-top: 26px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.qr-hdr {
+  padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none; transition: background .12s;
+}
+.qr-hdr:hover { background: var(--surface-2); }
+.qr-title { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.88rem; }
+.qr-caret { color: var(--t3); transition: transform .2s; display: flex; align-items: center; }
+.qr-caret.open { transform: rotate(180deg); }
+.qr-caret svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.qr-body { display: none; padding: 18px; border-top: 1px solid var(--border); }
+.qr-body.open { display: block; }
+
+.steps { display: flex; flex-direction: column; }
+.step { display: flex; gap: 14px; padding-bottom: 18px; position: relative; }
+.step:not(:last-child)::before {
+  content: ''; position: absolute; left: 13px; top: 30px; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.snum {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent-bg); border: 2px solid var(--accent); color: var(--accent-t);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 0.78rem;
+  flex-shrink: 0; z-index: 1;
+}
+.stxt { padding-top: 3px; }
+.stxt h4 { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.86rem; margin-bottom: 3px; }
+.stxt p { font-size: 0.78rem; color: var(--t2); line-height: 1.55; }
+.ic {
+  font-family: ui-monospace, 'Cascadia Code', monospace; font-size: 0.78em;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 3px; padding: 1px 5px; color: var(--t1);
+}
+.stxt pre {
+  font-family: ui-monospace, 'Cascadia Code', monospace; font-size: 0.74rem;
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 12px; margin-top: 8px; color: var(--t1); overflow-x: auto; white-space: pre;
+}
+
+/* COMPLIANCE */
+.compliance {
+  margin-top: 24px; padding: 15px 18px;
+  background: var(--accent-bg); border: 1px solid var(--accent);
+  border-radius: var(--r); font-size: 0.75rem; color: var(--accent-t); line-height: 1.65;
+}
+.compliance strong { font-weight: 700; }
+.compliance ul { padding-left: 16px; margin-top: 6px; }
+.compliance li { margin-bottom: 3px; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hdr, .stats, .legend, .main { padding-left: 14px; padding-right: 14px; }
+  .card-body { grid-template-columns: 1fr; gap: 12px; }
+  .c-status { align-items: flex-start; }
+  .c-next { text-align: left; }
+}
+@media (max-width: 580px) {
+  .badge-mfk { display: none; }
+  .hdr { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pn, .fbtn, .card, .qr-caret { transition: none; }
+}
+</style>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="logo">
+      <!-- layers icon = pipeline stages -->
+      <svg viewBox="0 0 20 20">
+        <path d="M10 2L2 6l8 4 8-4-8-4z"/>
+        <path d="M2 14l8 4 8-4"/>
+        <path d="M2 10l8 4 8-4"/>
+      </svg>
+    </div>
+    <div>
+      <div class="ch-name">kids-edu-yt</div>
+      <div class="ch-sub">Alphabet · Numbers · STEM</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <span class="badge-mfk">Made for Kids</span>
+    <button class="btn-theme" id="btnTheme" title="Toggle theme" aria-label="Toggle theme">
+      <svg id="ico-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="ico-moon" viewBox="0 0 24 24" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats" id="stats"></div>
+
+<!-- PIPELINE LEGEND -->
+<div class="legend">
+  <div class="legend-inner" id="legend"></div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="filters" id="filters">
+    <span class="fl">Pillar</span>
+    <button class="fbtn on" data-f="all">All</button>
+    <button class="fbtn" data-f="alphabet" data-p="alphabet">Alphabet</button>
+    <button class="fbtn" data-f="numbers"  data-p="numbers">Numbers</button>
+    <button class="fbtn" data-f="stem"     data-p="stem">STEM</button>
+    <button class="fbtn" data-f="shapes"   data-p="shapes">Shapes</button>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <!-- QUICK REF -->
+  <div class="qr">
+    <div class="qr-hdr" id="qrHdr" tabindex="0" role="button" aria-expanded="false">
+      <span class="qr-title">How to run a video through the pipeline</span>
+      <span class="qr-caret" id="qrCaret"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </div>
+    <div class="qr-body" id="qrBody">
+      <div class="steps">
+        <div class="step">
+          <div class="snum">1</div>
+          <div class="stxt">
+            <h4>Create a topic folder</h4>
+            <p>Choose a topic. Create the folder and copy template files.</p>
+            <pre>mkdir -p videos/letter-a
+cp videos/_template/* videos/letter-a/</pre>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">2</div>
+          <div class="stxt">
+            <h4>Agent 01 — Topic Research</h4>
+            <p>Open <code class="ic">agents/01-topic-research.md</code>. Paste the scoring prompt into Claude with your topic idea. Fill in <code class="ic">topic.json</code>. Set <code class="ic">status: "idea"</code>. Composite score must be ≥ 7.0 to proceed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">3</div>
+          <div class="stxt">
+            <h4>Agent 02 — Trend Research</h4>
+            <p>Open <code class="ic">agents/02-trend-research.md</code>. Research keywords, competitors, differentiation angle. Write <code class="ic">research.json</code>. Update <code class="ic">status: "research"</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">4</div>
+          <div class="stxt">
+            <h4>Agent 03 — Script Writing</h4>
+            <p>Open <code class="ic">agents/03-script-writing.md</code>. Generate the full 6-section script (Hook → Objective → Core → Reinforce → Recap → CTA). Write <code class="ic">script.md</code>. Update <code class="ic">status: "script"</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">5</div>
+          <div class="stxt">
+            <h4>Agent 04 — Voice Production</h4>
+            <p>Open <code class="ic">agents/04-voice-production.md</code>. Generate SSML script, voice brief, produce audio. Write <code class="ic">voice.json</code>. Listen through, set <code class="ic">approved: true</code>. Update <code class="ic">status: "voice"</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">6</div>
+          <div class="stxt">
+            <h4>Agent 05 — Visual Planning</h4>
+            <p>Open <code class="ic">agents/05-visual-planning.md</code>. Plan every scene with AI image prompts, b-roll list, edit plan. Write <code class="ic">visuals.json</code>. Update <code class="ic">status: "visuals"</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">7</div>
+          <div class="stxt">
+            <h4>Agent 06 — Thumbnail Creation</h4>
+            <p>Open <code class="ic">agents/06-thumbnail-creation.md</code>. Generate 10 concepts, rank, write AI image prompt for winner. Write <code class="ic">thumbnail.json</code>. Update <code class="ic">status: "thumbnail"</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">8</div>
+          <div class="stxt">
+            <h4>Agent 07 — Upload Preparation</h4>
+            <p>Open <code class="ic">agents/07-upload-prep.md</code>. Generate title, description, chapters, tags, playlist assignment. Write <code class="ic">upload.json</code>. Update <code class="ic">status: "ready_to_upload"</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">9</div>
+          <div class="stxt">
+            <h4>Human gate — review and upload manually</h4>
+            <p>Work through the checklist in <code class="ic">upload.json</code>. Upload in YouTube Studio. Select <strong>Made for Kids: Yes</strong>. Fill in <code class="ic">published_url</code>. Update <code class="ic">status: "published"</code>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="snum">★</div>
+          <div class="stxt">
+            <h4>Update the dashboard</h4>
+            <p>Edit the <code class="ic">VIDEOS</code> array in <code class="ic">dashboard/index.html</code> to reflect the new status. The dashboard reads from this embedded array — no server required.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE -->
+  <div class="compliance">
+    <strong>Check before every publish cycle — policies change</strong>
+    <ul>
+      <li><strong>Made for Kids / COPPA:</strong> Select "Yes — Made for Kids" in YouTube Studio for every upload. Comments and personalized ads are disabled. CPMs are lower than standard content.</li>
+      <li><strong>AI Disclosure:</strong> YouTube requires disclosure when AI materially contributed to content. Include this in each video description. Verify current policy at youtube.com/howyoutubeworks before publishing.</li>
+      <li><strong>Copyright:</strong> All music, characters, and visuals must be original or properly licensed. Never use copyrighted material without permission.</li>
+      <li><strong>Human approval gate:</strong> Never upload, publish, post comments, spend money, or change channel settings without explicit approval from Ahsan.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const STAGES = [
+  { id: 'idea',            label: 'Idea',     icon: '<circle cx="6" cy="5.5" r="3"/><line x1="6" y1="9" x2="6" y2="11"/><line x1="4.5" y1="10" x2="7.5" y2="10"/>' },
+  { id: 'research',        label: 'Research', icon: '<circle cx="5.5" cy="5.5" r="3.5"/><line x1="8" y1="8" x2="11" y2="11"/>' },
+  { id: 'script',          label: 'Script',   icon: '<rect x="2" y="1" width="8" height="10" rx="1"/><line x1="4" y1="4" x2="8" y2="4"/><line x1="4" y1="6" x2="8" y2="6"/><line x1="4" y1="8" x2="6.5" y2="8"/>' },
+  { id: 'voice',           label: 'Voice',    icon: '<rect x="4" y="1" width="4" height="6" rx="2"/><path d="M2 6c0 2.2 1.8 4 4 4s4-1.8 4-4" fill="none"/><line x1="6" y1="10" x2="6" y2="12"/>' },
+  { id: 'visuals',         label: 'Visuals',  icon: '<rect x="1" y="2" width="10" height="8" rx="1"/><polyline points="1,7.5 3.5,5 5.5,7 7.5,4.5 11,7.5"/>' },
+  { id: 'thumbnail',       label: 'Thumb',    icon: '<rect x="1" y="2" width="10" height="8" rx="1"/><circle cx="3.8" cy="4.8" r="1.2"/><polyline points="1,9 3.5,6.5 5.5,8.5 7.5,6 11,9"/>' },
+  { id: 'ready_to_upload', label: 'Ready',    icon: '<polyline points="6,1 6,8"/><polyline points="3,4 6,1 9,4"/><line x1="2" y1="11" x2="10" y2="11"/>' },
+  { id: 'published',       label: 'Live',     icon: '<polyline points="1.5,6 4.5,9.5 10.5,2"/>' },
+];
+const STAGE_IDS = STAGES.map(s => s.id);
+
+/* Edit this array as you add / progress videos */
+const VIDEOS = [
+  { slug: 'letter-a',                  title: 'Letter A — Apple, Ant, Alligator',       pillar: 'alphabet', ep: 'EP 01', status: 'visuals',         score: 8.0 },
+  { slug: 'counting-1-5',              title: 'Counting 1–5: Let\'s Count Together!',    pillar: 'numbers',  ep: 'EP 01', status: 'script',           score: 8.4 },
+  { slug: 'what-is-a-shadow',          title: 'What is a Shadow?',                       pillar: 'stem',     ep: 'EP 01', status: 'research',         score: 7.8 },
+  { slug: 'letter-b',                  title: 'Letter B — Ball, Bear, Butterfly',        pillar: 'alphabet', ep: 'EP 02', status: 'idea',             score: 7.6 },
+  { slug: 'shapes-circle-sq-triangle', title: 'Shapes: Circle, Square, Triangle',        pillar: 'shapes',   ep: 'EP 01', status: 'thumbnail',        score: 8.2 },
+];
+
+const PILLAR_LABEL = { alphabet: 'Alphabet', numbers: 'Numbers', stem: 'STEM', shapes: 'Shapes' };
+
+const CHIP = {
+  published:       { cls: 'pub',  label: 'Published' },
+  ready_to_upload: { cls: 'rdy',  label: 'Ready to Upload' },
+  thumbnail:       { cls: 'wip',  label: 'Thumbnail' },
+  visuals:         { cls: 'wip',  label: 'Visuals' },
+  voice:           { cls: 'wip',  label: 'Voice' },
+  script:          { cls: 'wip',  label: 'Script' },
+  research:        { cls: 'wip',  label: 'Research' },
+  idea:            { cls: 'idea', label: 'Idea' },
+};
+
+const NEXT = {
+  idea:            'Run Agent 01\ntopic.json',
+  research:        'Run Agent 02\nresearch.json',
+  script:          'Run Agent 03\nscript.md',
+  voice:           'Run Agent 04\nvoice.json',
+  visuals:         'Run Agent 05\nvisuals.json',
+  thumbnail:       'Run Agent 06\nthumbnail.json',
+  ready_to_upload: 'Run Agent 07\nthen upload manually',
+  published:       'Schedule analytics\n(7-day review)',
+};
+
+function svg(paths, vb = '0 0 12 12') {
+  return `<svg viewBox="${vb}" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" stroke="currentColor">${paths}</svg>`;
+}
+
+function renderLegend() {
+  let h = '';
+  STAGES.forEach((s, i) => {
+    h += `<div class="lg-stage"><div class="lg-node">${svg(s.icon)}</div><div class="lg-lbl">${s.label}</div></div>`;
+    if (i < STAGES.length - 1) h += `<div class="lg-line"></div>`;
+  });
+  document.getElementById('legend').innerHTML = h;
+}
+
+function renderPipeline(status) {
+  const cur = STAGE_IDS.indexOf(status);
+  return STAGES.map((s, i) => {
+    const state = i < cur ? 'done' : i === cur ? 'active' : 'future';
+    const line = i < cur ? 'done' : 'future';
+    const node = `<div class="pn-wrap"><div class="pn ${state}">${svg(s.icon)}</div><div class="pn-tip">${s.label}</div></div>`;
+    return node + (i < STAGES.length - 1 ? `<div class="pl ${line}"></div>` : '');
+  }).join('');
+}
+
+function renderCard(v) {
+  const c = CHIP[v.status] || CHIP.idea;
+  const nextLines = (NEXT[v.status] || '').split('\n').join('<br>');
+  return `
+<div class="card" data-p="${v.pillar}">
+  <div class="card-bar"></div>
+  <div class="card-body">
+    <div class="c-meta">
+      <div class="c-ep">${PILLAR_LABEL[v.pillar]} · ${v.ep}</div>
+      <div class="c-title" title="${v.title}">${v.title}</div>
+      <div class="c-tags">
+        <span class="c-ptag">${PILLAR_LABEL[v.pillar]}</span>
+        <span class="c-score">Score ${v.score.toFixed(1)}</span>
+      </div>
+    </div>
+    <div class="c-pipe">${renderPipeline(v.status)}</div>
+    <div class="c-status">
+      <span class="sch ${c.cls}">${c.label}</span>
+      <div class="c-next">${nextLines}</div>
+    </div>
+  </div>
+</div>`;
+}
+
+function renderStats() {
+  const total = VIDEOS.length;
+  const pub = VIDEOS.filter(v => v.status === 'published').length;
+  const rdy = VIDEOS.filter(v => v.status === 'ready_to_upload').length;
+  const wip = VIDEOS.filter(v => !['idea', 'published', 'ready_to_upload'].includes(v.status)).length;
+  const idea = VIDEOS.filter(v => v.status === 'idea').length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat-item"><span class="stat-n">${total}</span><span class="stat-l">Videos</span></div>
+    <div class="stat-div"></div>
+    <div class="stat-item"><span class="stat-n">${idea}</span><span class="stat-l">Ideas</span></div>
+    <div class="stat-item"><span class="stat-n">${wip}</span><span class="stat-l">In production</span></div>
+    <div class="stat-item"><span class="stat-n">${rdy}</span><span class="stat-l">Ready to upload</span></div>
+    <div class="stat-item"><span class="stat-n">${pub}</span><span class="stat-l">Published</span></div>`;
+}
+
+function renderCards(filter) {
+  const list = filter === 'all' ? VIDEOS : VIDEOS.filter(v => v.pillar === filter);
+  document.getElementById('cards').innerHTML = list.length
+    ? list.map(renderCard).join('')
+    : `<div class="empty"><div class="empty-icon">📭</div><div class="empty-h">No videos in this pillar yet</div><div class="empty-p">Add topic ideas and run Agent 01 to get started.</div></div>`;
+}
+
+/* Filters */
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('.fbtn');
+  if (!btn) return;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderCards(btn.dataset.f);
+});
+
+/* Quick ref toggle */
+const qrHdr = document.getElementById('qrHdr');
+const qrBody = document.getElementById('qrBody');
+const qrCaret = document.getElementById('qrCaret');
+function toggleQR() {
+  const open = qrBody.classList.toggle('open');
+  qrCaret.classList.toggle('open', open);
+  qrHdr.setAttribute('aria-expanded', open);
+}
+qrHdr.addEventListener('click', toggleQR);
+qrHdr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleQR(); } });
+
+/* Theme */
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  document.getElementById('ico-sun').style.display  = t === 'dark' ? '' : 'none';
+  document.getElementById('ico-moon').style.display = t === 'dark' ? 'none' : '';
+  try { localStorage.setItem('kids-edu-theme', t); } catch (_) {}
+}
+document.getElementById('btnTheme').addEventListener('click', () => {
+  applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+});
+try {
+  const stored = localStorage.getItem('kids-edu-theme');
+  if (stored) { applyTheme(stored); }
+  else {
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.getElementById('ico-sun').style.display  = dark ? '' : 'none';
+    document.getElementById('ico-moon').style.display = dark ? 'none' : '';
+  }
+} catch (_) {}
+
+/* Boot */
+renderLegend();
+renderStats();
+renderCards('all');
+</script>

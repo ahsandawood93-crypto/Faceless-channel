@@ -1,0 +1,37 @@
+{
+  "slug": "REPLACE-WITH-SLUG",
+  "made_for_kids": true,
+  "coppa_note": "MUST select 'Yes — Made for Kids' in YouTube Studio. Comments disabled. Personalized ads disabled.",
+  "ai_disclosure_note": "Disclose AI use in description per current YouTube policy.",
+  "title": "",
+  "title_character_count": 0,
+  "description": "",
+  "chapters": [],
+  "tags": [],
+  "playlist": "",
+  "end_screen": {
+    "next_video": "",
+    "subscribe_button": true
+  },
+  "thumbnail_file": "",
+  "category": "Education",
+  "language": "English",
+  "upload_checklist": [
+    "Final video file exported and named correctly",
+    "Thumbnail file ready",
+    "Title confirmed (under 60 chars)",
+    "Description pasted and links filled in",
+    "Chapters added",
+    "Tags added (15-20)",
+    "Category: Education",
+    "Made for Kids: YES selected",
+    "Playlist assigned",
+    "AI disclosure in description",
+    "Human review and approval complete"
+  ],
+  "status": "ready_to_upload",
+  "upload_date": null,
+  "published_url": null,
+  "approved_by": null,
+  "approved_date": null
+}

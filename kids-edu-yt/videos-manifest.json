@@ -1,0 +1,6 @@
+{
+  "_note": "Update this file manually as videos progress through the pipeline. The dashboard reads this file.",
+  "channel": "kids-edu-yt",
+  "last_updated": "YYYY-MM-DD",
+  "videos": []
+}

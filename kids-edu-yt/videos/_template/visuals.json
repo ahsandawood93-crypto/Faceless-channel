@@ -1,0 +1,23 @@
+{
+  "slug": "REPLACE-WITH-SLUG",
+  "total_scenes": 0,
+  "visual_style": {
+    "colour_palette": ["#FF4D4D", "#FFD700", "#4CAF50", "#2196F3", "#FF9800"],
+    "font": "Fredoka One",
+    "character_design": "TBD",
+    "animation_style": "2D flat cartoon, bright, simple"
+  },
+  "scenes": [],
+  "broll_list": [],
+  "text_animations": [],
+  "edit_plan": {
+    "software_suggestion": "CapCut / DaVinci Resolve / Adobe Premiere",
+    "total_clips": 0,
+    "transition_default": "fade 0.3s",
+    "music_track": "royalty-free upbeat children's background music",
+    "music_timing": "full volume at HOOK and OUTRO, -6dB under narration"
+  },
+  "veo_flow_notes": "",
+  "status": "visuals",
+  "approved": false
+}

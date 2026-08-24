@@ -1,0 +1,16 @@
+{
+  "slug": "REPLACE-WITH-SLUG",
+  "voice_brief": "",
+  "characters": [],
+  "emphasis_words": [],
+  "pause_map": [],
+  "music_notes": "Lower background music by 6dB whenever narrator speaks. Full volume only during HOOK and OUTRO jingles.",
+  "total_spoken_words": 0,
+  "estimated_duration_min": 0,
+  "tts_provider": "ElevenLabs",
+  "ssml_script_file": "voice-ssml.xml",
+  "audio_export_format": "WAV 44.1kHz 16-bit",
+  "status": "voice",
+  "production_notes": "",
+  "approved": false
+}
