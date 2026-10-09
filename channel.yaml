@@ -1,0 +1,59 @@
+# Minsa Kids TV — channel bible.
+# Every pipeline stage reads this file. Edit it here, never in code.
+# Anything still set to TODO stops the pipeline with a clear message.
+
+channel:
+  name: Minsa Kids TV
+  language: en
+  audience: "Children aged 2-6 and their parents"
+  topics: [alphabet, counting, colours, shapes, animals]
+  target_minutes: 3
+
+narrator:
+  style: >-
+    Warm, cheerful, gentle female storyteller. Slow and clear, with short
+    sentences, a smile in the voice, and small pauses after new words.
+    Speaks directly to the child ("Can you say it with me?").
+  words_per_minute: 120   # toddler pace; caps narration per scene
+
+# Full descriptions are pasted word for word into every Veo prompt,
+# because Veo has no memory between clips. Be specific: age, size, hair,
+# clothes, colours, face shape. Keep each to 1-3 sentences.
+characters:
+  minsa:
+    name: Minsa
+    description: TODO
+    reference_image: assets/characters/minsa.png
+  mana:
+    name: Mana
+    description: TODO
+    reference_image: assets/characters/mana.png
+
+visual_style: >-
+  Bright, colourful 3D cartoon animation in a soft, rounded, toy-like style.
+  Warm sunny lighting, pastel and primary colours, smooth gentle motion,
+  friendly cheerful mood, clean simple backgrounds. Child-safe and calm.
+
+content_rules:
+  - Facts must be correct and right for ages 2-6.
+  - Nothing scary, sad, violent or dangerous; no peril, no one getting hurt.
+  - No brands, logos, real people, or copyrighted characters.
+  - No text, letters or numbers drawn inside the video scene itself; on-screen text is added later.
+  - No dialogue or lip-synced speech in the video; narration is added later.
+  - Every episode ends with a short recap and a friendly goodbye.
+
+intro_line: "Hello, friends! It's Minsa and Mana! Are you ready to learn with us?"
+outro_line: "Bye-bye, friends! See you next time on Minsa Kids TV!"
+
+# Uploads stay private until approved, then get publishAt = next free slot.
+schedule:
+  timezone: Asia/Dubai
+  days: [Mon, Wed, Fri]
+  time: "16:00"
+
+veo:
+  model: veo-3.1-fast-generate-preview   # or veo-3.1-generate-preview (higher quality, ~3x cost)
+  resolution: 1080p
+  aspect_ratio: "16:9"
+  generated_seconds: 8                   # Veo returns 8 s when reference images are used
+  usd_per_second: 0.12                   # check https://ai.google.dev/gemini-api/docs/pricing

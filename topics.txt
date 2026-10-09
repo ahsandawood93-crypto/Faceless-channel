@@ -1,0 +1,7 @@
+# One topic per line. `python run.py next` takes the first one and removes it.
+# Lines starting with # are ignored.
+Letter A is for Apple
+Counting to 5 with ducks
+Red, yellow and blue: the primary colours
+Circles, squares and triangles
+Farm animals and the sounds they make

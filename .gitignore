@@ -1,14 +1,19 @@
+# Secrets
 .env
 *.env.local
-node_modules/
+client_secret*.json
+*token*.json
+
+# Generated episodes (audio, clips, renders)
+episodes/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# OS
 .DS_Store
 Thumbs.db
-*.mp4
-*.mp3
-*.wav
-*.aiff
-*.mov
-*.png
-*.jpg
-*.jpeg
-*.webp

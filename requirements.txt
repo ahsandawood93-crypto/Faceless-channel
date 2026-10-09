@@ -1,0 +1,13 @@
+# Core (Stage 0)
+pyyaml>=6.0
+python-dotenv>=1.0
+pytest>=8.0
+
+# Added per stage; minimum versions are checked when each stage is built.
+anthropic              # Stage 1
+elevenlabs             # Stage 2
+google-genai           # Stage 3
+Pillow                 # Stage 4 (thumbnail)
+requests               # Stage 5 (Telegram)
+google-api-python-client  # Stage 6
+google-auth-oauthlib      # Stage 6
