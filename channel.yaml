@@ -57,3 +57,4 @@ veo:
   aspect_ratio: "16:9"
   generated_seconds: 8                   # Veo returns 8 s when reference images are used
   usd_per_second: 0.12                   # check https://ai.google.dev/gemini-api/docs/pricing
+  max_usd_per_run: 40                    # safety cap: refuse to start a Veo run estimated above this

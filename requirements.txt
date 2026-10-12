@@ -1,13 +1,14 @@
-# Core (Stage 0)
+# Tested with the versions noted. Python 3.11+.
 pyyaml>=6.0
 python-dotenv>=1.0
-pytest>=8.0
+tzdata>=2024.1                    # time zones for zoneinfo on Windows
 
-# Added per stage; minimum versions are checked when each stage is built.
-anthropic              # Stage 1
-elevenlabs             # Stage 2
-google-genai           # Stage 3
-Pillow                 # Stage 4 (thumbnail)
-requests               # Stage 5 (Telegram)
-google-api-python-client  # Stage 6
-google-auth-oauthlib      # Stage 6
+anthropic>=1.13,<2               # Stage 1 (tested 1.13.0)
+elevenlabs>=2.0,<3               # Stage 2 (tested 2.71.0)
+google-genai>=2.29,<3            # Stage 3 (tested 2.29.0)
+Pillow>=10.1                     # Stage 4 overlays, captions, thumbnail (tested 12.3.0)
+requests>=2.31                   # Stage 5 Telegram (tested 2.34.2)
+google-api-python-client>=2.100  # Stage 6 (tested 2.201.0)
+google-auth-oauthlib>=1.2        # Stage 6 (tested 1.5.0)
+
+pytest>=8.0

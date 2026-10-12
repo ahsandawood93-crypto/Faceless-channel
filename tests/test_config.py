@@ -44,12 +44,13 @@ def test_missing_file(tmp_path):
 
 def test_require_env_names_missing_keys(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+    monkeypatch.delenv("GEMINI_API_KEY")
     with pytest.raises(ConfigError, match="GEMINI_API_KEY"):
         require_env("ANTHROPIC_API_KEY", "GEMINI_API_KEY")
     assert require_env("ANTHROPIC_API_KEY") == {"ANTHROPIC_API_KEY": "sk-test"}
 
 
 def test_env_file_is_read(tmp_path, monkeypatch):
-    (tmp_path / ".env").write_text("GEMINI_API_KEY=from-file\n")
-    assert config.env("GEMINI_API_KEY") == "from-file"
-    assert config.env("CLAUDE_MODEL", "default-model") == "default-model"
+    (tmp_path / ".env").write_text("CLAUDE_MODEL=from-file\n")
+    assert config.env("CLAUDE_MODEL") == "from-file"
+    assert config.env("ELEVENLABS_MODEL", "default-model") == "default-model"
