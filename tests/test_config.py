@@ -44,9 +44,9 @@ def test_missing_file(tmp_path):
 
 def test_require_env_names_missing_keys(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
-    monkeypatch.delenv("GEMINI_API_KEY")
-    with pytest.raises(ConfigError, match="GEMINI_API_KEY"):
-        require_env("ANTHROPIC_API_KEY", "GEMINI_API_KEY")
+    monkeypatch.delenv("GOOGLE_CLOUD_PROJECT")
+    with pytest.raises(ConfigError, match="GOOGLE_CLOUD_PROJECT"):
+        require_env("ANTHROPIC_API_KEY", "GOOGLE_CLOUD_PROJECT")
     assert require_env("ANTHROPIC_API_KEY") == {"ANTHROPIC_API_KEY": "sk-test"}
 
 

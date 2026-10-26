@@ -1,19 +1,22 @@
-"""Stage 3: one Veo 3.1 clip per scene through the Gemini API (google-genai).
+"""Stage 3: one Veo 3.1 clip per scene through Vertex AI (Google Cloud), google-genai SDK.
+
+Google shut down the Veo 3.1 *preview* models on the Gemini API on 2026-10-22,
+so this uses the GA Veo models on Vertex AI (e.g. veo-3.1-fast-generate-001).
 
 - Character reference images (assets/characters/*.png) are sent as "asset"
   reference images so Minsa and Mana look the same in every clip. With
   reference images Veo returns 8-second clips; assembly trims to clip_seconds.
-- The Gemini API always generates audio (generate_audio=False is rejected
-  there), so the audio track is stripped with ffmpeg when the clip is saved.
+- Audio generation is switched off (cheaper video-only rate) and any audio
+  track is stripped with ffmpeg anyway; narration comes from Stage 2.
 - Existing clips are skipped. Shows the estimated cost and asks first.
 - --no-video writes free solid-colour placeholders instead.
 """
 
 import time
 
-from pipeline.config import ROOT, ConfigError, require_env
+from pipeline.config import ROOT, ConfigError, env, require_env
 from pipeline.util import (StageError, confirm, ffmpeg, info, is_transient_http, require_ffmpeg,
-                           step, warn, with_retries)
+                           status_code, step, warn, with_retries)
 
 POLL_SECONDS = 10
 TIMEOUT_SECONDS = 15 * 60
@@ -21,6 +24,9 @@ NEGATIVE_PROMPT = ("text, letters, numbers, words, captions, subtitles, watermar
                    "talking, lip sync, scary, dark, violent, sad")
 PROMPT_SUFFIX = " No dialogue or speech. No text, letters, numbers or signs anywhere in the scene."
 PLACEHOLDER_COLOURS = ["0x8ecae6", "0xffb703", "0x90be6d", "0xf4a3c4", "0xcdb4db"]
+DEFAULT_LOCATION = "us-central1"
+CHILD_SAFETY_HINT = ("Veo's people filter may be blocking a child character. See README "
+                     "'Veo and child characters'.")
 
 
 class ClipFailed(Exception):
@@ -58,10 +64,21 @@ def reference_images(scene, channel):
 
 
 def make_client():
+    """Vertex AI client. Auth comes from `gcloud auth application-default login`
+    or a service-account JSON in GOOGLE_APPLICATION_CREDENTIALS."""
     from google import genai
 
-    key = require_env("GEMINI_API_KEY")["GEMINI_API_KEY"]
-    return genai.Client(api_key=key)
+    import google.auth
+    from google.auth.exceptions import DefaultCredentialsError
+
+    project = require_env("GOOGLE_CLOUD_PROJECT")["GOOGLE_CLOUD_PROJECT"]
+    location = env("GOOGLE_CLOUD_LOCATION", DEFAULT_LOCATION)
+    try:
+        google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
+    except DefaultCredentialsError:
+        raise ConfigError("No Google Cloud login found for Vertex AI. Run once: "
+                          "gcloud auth application-default login   (README 'Vertex AI setup')") from None
+    return genai.Client(vertexai=True, project=project, location=location)
 
 
 def _image(path):
@@ -83,7 +100,9 @@ def generate_clip(client, scene, channel, out_path, use_references=True, sleep=t
     refs = reference_images(scene, channel)
     config = dict(aspect_ratio=veo["aspect_ratio"], resolution=veo["resolution"],
                   duration_seconds=veo["generated_seconds"], number_of_videos=1,
-                  negative_prompt=NEGATIVE_PROMPT)
+                  negative_prompt=NEGATIVE_PROMPT, generate_audio=bool(veo.get("generate_audio", False)))
+    if veo.get("person_generation"):
+        config["person_generation"] = veo["person_generation"]
     kwargs = {}
     if refs and use_references:
         config["reference_images"] = [
@@ -110,12 +129,18 @@ def generate_clip(client, scene, channel, out_path, use_references=True, sleep=t
     videos = getattr(response, "generated_videos", None) if response else None
     if not videos:
         reasons = getattr(response, "rai_media_filtered_reasons", None) if response else None
-        raise ClipFailed(f"Veo returned no video (safety filter?) {reasons or ''}".strip())
+        message = f"Veo returned no video (safety filter?) {reasons or ''}".strip()
+        if any(w in str(reasons).lower() for w in ("child", "minor", "person", "people")):
+            message += " " + CHILD_SAFETY_HINT
+        raise ClipFailed(message)
 
     video = videos[0].video
     raw = out_path.with_suffix(".raw.mp4")
-    client.files.download(file=video)
-    video.save(str(raw))
+    if not getattr(video, "video_bytes", None):
+        if not str(getattr(video, "uri", "")).startswith("http"):
+            raise ClipFailed(f"Veo returned the video at {video.uri!r}, which can't be downloaded here")
+        client.files.download(file=video)  # Gemini-API style URI
+    video.save(str(raw))  # Vertex returns the MP4 bytes inline
     ffmpeg("-i", raw, "-an", "-c:v", "copy", "-movflags", "+faststart", out_path)  # strip audio
     raw.unlink(missing_ok=True)
 
@@ -142,7 +167,7 @@ def run_stage(episode, channel, client=None, yes=False, placeholder=False, sleep
             reference_images(scene, channel)  # fail on a missing image before spending money
         cost = estimate_cost(channel, len(todo))
         veo = channel["veo"]
-        info(f"{len(todo)} clip(s) × {veo['generated_seconds']} s × ${veo['usd_per_second']}/s "
+        info(f"{len(todo)} clip(s) × {veo['generated_seconds']} s × ${veo['usd_per_second']:.2f}/s "
              f"({veo['model']}, {veo['resolution']}) ≈ ${cost:.2f}")
         cap = veo.get("max_usd_per_run")
         if cap is not None and cost > cap:
@@ -181,6 +206,12 @@ def run_stage(episode, channel, client=None, yes=False, placeholder=False, sleep
             failed.append(scene["n"])
             episode.add_review_note(f"Clip failed: {e}", stage="video", scene=scene["n"])
             warn(f"{label}FAILED ({e})")
+            if status_code(e) in (401, 403, 404):  # same for every scene: stop instead of repeating it
+                raise StageError(
+                    f"Vertex AI refused the request ({e}). Check: Vertex AI API enabled, billing on, "
+                    f"your login (gcloud auth application-default login), and that veo.model "
+                    f"'{channel['veo']['model']}' still exists. Then rerun: python run.py video {episode.slug}"
+                ) from e
             continue
         scene.update(clip_file=clip_name(scene), clip_placeholder=False)
         episode.save()

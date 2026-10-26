@@ -51,10 +51,15 @@ schedule:
   days: [Mon, Wed, Fri]
   time: "16:00"
 
+# Veo 3.1 on Vertex AI (Google Cloud). The Gemini API preview models were shut
+# down on 2026-10-22. Model list: Vertex AI docs > Models > Veo 3.1.
 veo:
-  model: veo-3.1-fast-generate-preview   # or veo-3.1-generate-preview (higher quality, ~3x cost)
+  model: veo-3.1-fast-generate-001       # or veo-3.1-generate-001 (higher quality, ~2x cost)
   resolution: 1080p
   aspect_ratio: "16:9"
   generated_seconds: 8                   # Veo returns 8 s when reference images are used
-  usd_per_second: 0.12                   # check https://ai.google.dev/gemini-api/docs/pricing
+  generate_audio: false                  # narration comes from ElevenLabs; video-only is cheaper
+  person_generation: null                # null = Google's default. "allow_all" (incl. children) needs
+                                         # Google allowlisting; see README "Veo and child characters"
+  usd_per_second: 0.10                   # Fast, 1080p, video only; check Vertex AI pricing
   max_usd_per_run: 40                    # safety cap: refuse to start a Veo run estimated above this

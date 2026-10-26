@@ -51,11 +51,12 @@ def no_real_env(monkeypatch, tmp_path):
     monkeypatch.setattr(config, "ENV_FILE", tmp_path / ".env")
     (tmp_path / "episodes").mkdir()
     monkeypatch.setattr(episode_module, "EPISODES_DIR", tmp_path / "episodes")
-    for key in ["ANTHROPIC_API_KEY", "ELEVENLABS_API_KEY", "ELEVENLABS_VOICE_ID", "GEMINI_API_KEY",
+    for key in ["ANTHROPIC_API_KEY", "ELEVENLABS_API_KEY", "ELEVENLABS_VOICE_ID", "GOOGLE_CLOUD_PROJECT",
                 "TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"]:
         monkeypatch.setenv(key, f"test-{key.lower()}")
     monkeypatch.setenv("TELEGRAM_CHAT_ID", "42")
-    for key in ["CLAUDE_MODEL", "ELEVENLABS_MODEL", "YOUTUBE_CLIENT_SECRET_FILE", "YOUTUBE_TOKEN_FILE"]:
+    for key in ["CLAUDE_MODEL", "ELEVENLABS_MODEL", "YOUTUBE_CLIENT_SECRET_FILE", "YOUTUBE_TOKEN_FILE",
+                "GOOGLE_CLOUD_LOCATION", "GOOGLE_APPLICATION_CREDENTIALS"]:
         monkeypatch.delenv(key, raising=False)
 
 

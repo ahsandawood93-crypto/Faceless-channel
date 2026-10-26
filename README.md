@@ -63,7 +63,9 @@ topic → 1 Script (Claude) → 2 Voiceover (ElevenLabs) → 3 Clips (Veo 3.1)
 | `ELEVENLABS_API_KEY` | 2 Voice | https://elevenlabs.io/app/settings/api-keys |
 | `ELEVENLABS_VOICE_ID` | 2 Voice | ElevenLabs → Voices → pick a warm narrator voice → "Copy voice ID" |
 | `ELEVENLABS_MODEL` | 2 Voice | Optional. Default `eleven_multilingual_v2` (long-form narration) |
-| `GEMINI_API_KEY` | 3 Clips | https://aistudio.google.com/apikey (**billing must be enabled**; Veo has no free tier) |
+| `GOOGLE_CLOUD_PROJECT` | 3 Clips | Your Google Cloud project ID (see "Vertex AI setup"; billing must be on, Veo has no free tier) |
+| `GOOGLE_CLOUD_LOCATION` | 3 Clips | Optional. Default `us-central1` |
+| `GOOGLE_APPLICATION_CREDENTIALS` | 3 Clips | Optional. Path to a service-account JSON key, if you don't use `gcloud auth application-default login` |
 | `TELEGRAM_BOT_TOKEN` | 5 Approval | Telegram → @BotFather → `/newbot` |
 | `TELEGRAM_CHAT_ID` | 5 Approval | Send your bot any message, open `https://api.telegram.org/bot<TOKEN>/getUpdates`, copy `message.chat.id` |
 | `YOUTUBE_CLIENT_SECRET_FILE` | 6 Upload | Path to the OAuth client JSON (default `client_secret.json`, git-ignored) |
@@ -76,6 +78,38 @@ Each stage only asks for its own keys, so you can start with just the Anthropic 
 2. Open a chat with your new bot and send "hi".
 3. Open `https://api.telegram.org/bot<TOKEN>/getUpdates` in a browser; copy
    `"chat":{"id": ...}` into `TELEGRAM_CHAT_ID`. The bot ignores everyone else.
+
+### Vertex AI setup for Veo (one time, ~10 minutes)
+Google shut down the Veo 3.1 preview models on the Gemini API on 22 Oct 2026,
+so clips are made with the GA Veo 3.1 models on **Vertex AI** (Google Cloud).
+You can use the same Google Cloud project as YouTube below.
+1. https://console.cloud.google.com → create or pick a project → copy its
+   **Project ID** into `GOOGLE_CLOUD_PROJECT`.
+2. Billing → link a billing account to the project.
+3. APIs & Services → Library → enable **Vertex AI API**.
+4. Install the Google Cloud CLI (https://cloud.google.com/sdk/docs/install), then run once:
+   ```bash
+   gcloud auth application-default login
+   ```
+   This stores a login on your PC that the pipeline uses automatically, also
+   for scheduled runs. (Alternative: create a service account with the
+   *Vertex AI User* role, download its JSON key and set
+   `GOOGLE_APPLICATION_CREDENTIALS` to its path. Never commit that file.)
+
+### Veo and child characters
+Veo on Vertex AI has a people filter (`personGeneration`). Google's default
+allows adults only; generating children (`allow_all`) needs your project to be
+allowlisted by Google. Minsa is a 5-year-old girl, so some clips may come back
+empty. When that happens the scene is logged in `review_notes` with this hint,
+and the other scenes carry on. Your options:
+- Ask Google Cloud support (or your account team) for `allow_all` access for
+  Veo, explaining it's an original animated kids' character for a YouTube Kids
+  channel. Once granted, set `veo.person_generation: allow_all` in `channel.yaml`.
+- Or design the characters as non-human mascots (an animal or toy
+  character, like Mana the elephant), which the people filter doesn't apply to.
+
+Do one cheap test first (set `target_minutes: 1` in `channel.yaml`: about 8 clips)
+to see how your characters are handled before running full episodes.
 
 ### YouTube setup (one time, ~15 minutes)
 1. https://console.cloud.google.com → create a project (e.g. "Minsa Kids TV Autopilot").
@@ -187,17 +221,19 @@ in a terminal (or as a startup task) instead of the 15-minute job.
 
 | Item | Per 3-minute episode |
 |---|---|
-| **Veo 3.1 Fast**, 1080p: ~23 clips × 8 s × $0.12/s | **~$22** |
-| Veo 3.1 Standard, 1080p ($0.40/s) | ~$74 |
+| **Veo 3.1 Fast** on Vertex AI, 1080p, video only: ~23 clips × 8 s × $0.10/s | **~$18** |
+| Veo 3.1 Standard on Vertex AI, 1080p, video only (~$0.20/s) | ~$37 |
 | Claude Sonnet 5.5 script ($2 / $10 per million tokens in/out), 1–3 attempts | ~$0.10–0.50 |
 | ElevenLabs: about 2,000 characters | part of your monthly character allowance |
 | YouTube Data API, Telegram | free |
 
 Veo is almost the whole bill, and failed or retried clips cost extra. Three
-episodes a week on Veo Fast is roughly $270–300 a month. The price per second
+episodes a week on Veo Fast is roughly $220–250 a month. The price per second
 lives in `channel.yaml` (`veo.usd_per_second`) and drives the estimate shown
-before each run. Switch `veo.model` to `veo-3.1-generate-preview` for higher
-quality at about 3× the cost.
+before each run. Switch `veo.model` to `veo-3.1-generate-001` (and
+`usd_per_second` to its rate) for higher quality at about 2× the cost.
+Prices are from third-party summaries of Vertex AI pricing; check
+https://cloud.google.com/vertex-ai/generative-ai/pricing before budgeting.
 
 ## Things to know
 
@@ -206,9 +242,12 @@ quality at about 3× the cost.
   *forced* `tool_choice`, so it uses `tool_choice: auto` with `strict: true`
   and retries if no tool call comes back. Refusals fall back server-side
   (`fallbacks: "default"`).
-- **Veo** returns 8-second clips when reference images are used; scenes
-  shorter than 8 s are trimmed during assembly. The Gemini API always
-  generates audio, so it's stripped with ffmpeg. If Veo rejects reference
+- **Veo** runs on Vertex AI (`veo-3.1-fast-generate-001`). It returns
+  8-second clips when reference images are used; scenes shorter than 8 s are
+  trimmed during assembly. Audio generation is off (`generate_audio: false`)
+  and any audio track is stripped with ffmpeg as well. Google retires model
+  versions from time to time: if Veo starts failing with "model not found",
+  check the Vertex AI Veo model page and update `veo.model`. If Veo rejects reference
   images for your account, the scene is retried with the character image as
   its starting frame and a review note is added.
 - **Captions** are timed by spreading each scene's words across its real
@@ -244,5 +283,5 @@ tests/                pytest, every external API mocked
 python -m pytest
 ```
 
-95 tests. They use temp folders, fake API clients and real ffmpeg on tiny
+101 tests. They use temp folders, fake API clients and real ffmpeg on tiny
 files. They never call a paid API and never touch your `episodes/` folder or `.env`.
